@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/event.dart';
 import '../models/seat.dart';
 
+
 class ApiService {
   static const String baseUrl = "http://192.168.0.101:8080";
   // static const String baseUrl = "http://172.20.10.3:8080";
@@ -117,6 +118,7 @@ class ApiService {
     }
   }
 
+  /// Получить билеты пользователя
   Future<List<dynamic>> fetchUserTickets(String token) async {
     final uri = Uri.parse('$baseUrl/myTickets');
     final response = await http.get(
