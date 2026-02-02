@@ -17,7 +17,6 @@ void main() {
       apiService = ApiService();
     });
 
-    // Tests for fetchEvents
     group('fetchEvents', () {
       test('method exists and returns Future<List<Event>>', () {
         final result = apiService.fetchEvents();
@@ -35,7 +34,6 @@ void main() {
       });
     });
 
-    // Tests for getSeatsByEvent
     group('getSeatsByEvent', () {
       test('method exists and returns Future<List<Seat>>', () {
         final result = apiService.getSeatsByEvent(1);
@@ -48,7 +46,6 @@ void main() {
       });
     });
 
-    // Tests for authentication methods
     group('Authentication methods', () {
       test('login method returns Future<http.Response>', () {
         final result = apiService.login('test@example.com', 'password123');
@@ -64,7 +61,6 @@ void main() {
         final email = 'test@example.com';
         final password = 'password123';
 
-        // Check that method exists and returns Future
         final loginFuture = apiService.login(email, password);
         expect(loginFuture, isA<Future>());
       });
@@ -79,7 +75,6 @@ void main() {
       });
     });
 
-    // Tests for seat booking
     group('Seat booking', () {
       test('bookSeats method returns Future<http.Response>', () {
         final result = apiService.bookSeats('token123', 1, ['A1', 'A2']);
@@ -87,13 +82,11 @@ void main() {
       });
 
       test('bookSeats includes authorization header', () async {
-        // Demonstrates that method is properly constructed
         final result = apiService.bookSeats('valid_token', 100, ['A1']);
         expect(result, isA<Future>());
       });
     });
 
-    // Tests for password reset
     group('Password reset methods', () {
       test('requestPasswordReset returns Future<String?>', () {
         final result = apiService.requestPasswordReset('test@example.com');
@@ -106,7 +99,6 @@ void main() {
       });
     });
 
-    // Tests for profile methods
     group('Profile methods', () {
       test('fetchUserProfile returns Future<Map?>', () {
         final result = apiService.fetchUserProfile('token123');
@@ -119,7 +111,6 @@ void main() {
       });
     });
 
-    // Tests for tickets
     group('Tickets methods', () {
       test('fetchUserTickets returns Future<List>', () {
         final result = apiService.fetchUserTickets('token123');
@@ -127,7 +118,6 @@ void main() {
       });
     });
 
-    // Tests for admin methods
     group('Admin methods', () {
       test('fetchAdminEvents returns Future<List<Event>>', () {
         final result = apiService.fetchAdminEvents('admin_token');
@@ -161,7 +151,6 @@ void main() {
       });
     });
 
-    // Tests for API endpoint structure
     group('API endpoint structure', () {
       test('baseUrl is defined and not empty', () {
         expect(ApiService.baseUrl, isNotEmpty);
