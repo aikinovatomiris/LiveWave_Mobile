@@ -3,10 +3,11 @@ import 'package:http/http.dart' as http;
 import '../models/event.dart';
 import '../models/seat.dart';
 import 'retry_handler.dart';
+import '../config/local_config.dart';
 
 
 class ApiService {
-  static const String baseUrl = "IP_ADDRESS";
+  static const String baseUrl = LocalConfig.baseUrl;
   
   late final RetryHandler _retryHandler;
   late final CacheManager _cacheManager;
@@ -422,7 +423,7 @@ class ApiService {
           'Authorization': 'Bearer $jwtToken',
         },
         body: jsonEncode({
-          'fcmToken': token   // ← ВОТ ЭТО ОБЯЗАТЕЛЬНО
+          'fcmToken': token   
         }),
       );
 
