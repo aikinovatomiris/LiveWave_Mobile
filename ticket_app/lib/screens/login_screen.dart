@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/api_service.dart';
 import '../routes.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -76,22 +78,51 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> _handleLoginResponse(dynamic response) async {
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('jwt_token', data['token']);
-      await prefs.setString('user_role', data['role']);
-      Navigator.pushReplacementNamed(context, Routes.home);
+Future<void> _handleLoginResponse(dynamic response) async {
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('jwt_token', data['token']);
+    await prefs.setString('user_role', data['role']);
+
+    print("LOGIN SUCCESS");
+
+    // 🔥 ПОЛУЧАЕМ FCM токен
+    final messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    print("NOTIFICATION PERMISSION: ${settings.authorizationStatus}");
+
+    String? fcmToken = await messaging.getToken();
+
+    print("=====================================");
+    print("FCM TOKEN FROM DEVICE: $fcmToken");
+    print("=====================================");
+
+    if (fcmToken != null && fcmToken.isNotEmpty) {
+      print("SENDING TOKEN TO BACKEND...");
+      final result = await ApiService().sendFcmToken(data['token'], fcmToken);
+      print("SEND RESULT: $result");
     } else {
-      String message = 'Неверный email или пароль';
-      try {
-        final body = jsonDecode(response.body);
-        message = body['message'] ?? message;
-      } catch (_) {}
-      _showError(message);
+      print("FCM TOKEN IS NULL !!!");
     }
+
+    Navigator.pushReplacementNamed(context, Routes.home);
+  } else {
+    String message = 'Неверный email или пароль';
+    try {
+      final body = jsonDecode(response.body);
+      message = body['message'] ?? message;
+    } catch (_) {}
+    _showError(message);
   }
+}
+
 
   void _showError(String message) {
     setState(() => isLoading = false);

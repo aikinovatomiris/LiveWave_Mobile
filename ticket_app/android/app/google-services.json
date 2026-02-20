@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1067028745660",
+    "project_id": "livewave-f4291",
+    "storage_bucket": "livewave-f4291.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1067028745660:android:fc7b0c540c022c3da1efb9",
+        "android_client_info": {
+          "package_name": "com.example.ticket_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC24iVTonpvsJexkl_GKFU_kldLg8_GRC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
