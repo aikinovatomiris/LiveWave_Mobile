@@ -3,6 +3,7 @@ import '../models/event.dart';
 import '../models/seat.dart';
 import '../services/api_service.dart';
 import '../widgets/app_button.dart';
+import 'package:ticket_app/services/websocket_service.dart';
 
 class SeatSelectionScreen extends StatefulWidget {
   final Event event;
@@ -13,6 +14,7 @@ class SeatSelectionScreen extends StatefulWidget {
   State<SeatSelectionScreen> createState() => _SeatSelectionScreenState();
 }
 
+
 class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
   late Future<List<Seat>> _futureSeats;
   final Set<String> selectedSeatNumbers = {};
@@ -20,7 +22,39 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
   @override
   void initState() {
     super.initState();
+
     _futureSeats = ApiService().getSeatsByEvent(widget.event.id);
+
+    WebsocketService.instance.connect();
+
+    WebsocketService.instance.subscribeToSeats(
+      widget.event.id,
+      _handleSeatUpdate,
+    );
+  }
+
+  void _handleSeatUpdate(Seat updatedSeat) {
+    setState(() {
+      _futureSeats = _futureSeats.then((seats) {
+        return seats.map((seat) {
+          if (seat.id == updatedSeat.id) {
+            return updatedSeat;
+          }
+          return seat;
+        }).toList();
+      });
+
+      // Если место стало выкупленным — убираем из выбранных
+      if (updatedSeat.isBooked) {
+        selectedSeatNumbers.remove(updatedSeat.seatNumber);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    WebsocketService.instance.unsubscribeFromSeats(widget.event.id);
+    super.dispose();
   }
 
   void toggleSeat(Seat seat) {
