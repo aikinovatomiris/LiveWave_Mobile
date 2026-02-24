@@ -44,7 +44,6 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
         }).toList();
       });
 
-      // Если место стало выкупленным — убираем из выбранных
       if (updatedSeat.isBooked) {
         selectedSeatNumbers.remove(updatedSeat.seatNumber);
       }

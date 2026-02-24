@@ -21,7 +21,6 @@ class WebsocketService {
     if (_connected || _connecting) return;
     _connecting = true;
 
-    // ВАЖНО: для чистого websocket нужен ws://
     final base = LocalConfig.baseUrl.trim();
 
     final wsBase = base.startsWith('https://')
@@ -37,7 +36,7 @@ class WebsocketService {
     _client = StompClient(
       config: StompConfig(
         url: wsUrl,
-        useSockJS: false, // <-- ключевой момент
+        useSockJS: false, 
         onConnect: (frame) {
           print('✅ STOMP connected');
           _connected = true;
@@ -45,18 +44,18 @@ class WebsocketService {
           _restoreSeatSubscriptions();
         },
         onWebSocketError: (dynamic error) {
-          print('❌ WebSocket error: $error');
+          print('WebSocket error: $error');
           _connected = false;
           _connecting = false;
           _reconnect();
         },
         onDisconnect: (_) {
-          print('🔌 disconnected');
+          print('disconnected');
           _connected = false;
           _connecting = false;
           _reconnect();
         },
-        onStompError: (frame) => print('❌ STOMP error: ${frame.body}'),
+        onStompError: (frame) => print('STOMP error: ${frame.body}'),
       ),
     );
 
@@ -93,7 +92,7 @@ class WebsocketService {
 
     if (unsub != null) {
       _seatSubscriptions[eventId] = unsub;
-      print('📡 subscribed $destination');
+      print('subscribed $destination');
     }
   }
 
@@ -106,7 +105,7 @@ class WebsocketService {
   void _reconnect() {
     Future.delayed(const Duration(seconds: 3), () {
       if (!_connected && !_connecting && _seatHandlers.isNotEmpty) {
-        print('🔁 reconnecting...');
+        print('reconnecting...');
         connect();
       }
     });
