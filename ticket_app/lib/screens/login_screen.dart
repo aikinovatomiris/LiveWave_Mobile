@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../services/api_service.dart';
 import '../routes.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import '../services/graphql_service.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -85,6 +86,8 @@ Future<void> _handleLoginResponse(dynamic response) async {
     await prefs.setString('jwt_token', data['token']);
     await prefs.setString('user_role', data['role']);
 
+    await GraphQLService.instance.init(token: data['token']);
+
     print("LOGIN SUCCESS");
 
     // 🔥 ПОЛУЧАЕМ FCM токен
@@ -136,7 +139,8 @@ Future<void> _handleLoginResponse(dynamic response) async {
     );
   }
 
-  void _continueWithoutLogin() {
+  void _continueWithoutLogin() async {
+    await GraphQLService.instance.initAsGuest();
     Navigator.pushReplacementNamed(context, Routes.home);
   }
 

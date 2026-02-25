@@ -8,6 +8,7 @@ import '../widgets/event_carousel.dart';
 import '../widgets/event_card.dart';
 import '../widgets/city_selector.dart';
 import '../widgets/event_search_bar.dart';
+import '../services/graphql_api.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -42,11 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _loadEvents() async {
+    // ignore: unused_local_variable
     final api = ApiService();
 
     setState(() {
-      _futureEventsByCity = api.fetchEvents(city: _selectedCity);
-      _allEventsFuture = api.fetchEvents();
+      _futureEventsByCity = GraphQLApi.instance.fetchEvents(city: _selectedCity);
+      _allEventsFuture = GraphQLApi.instance.fetchEvents();
     });
 
     final all = await _allEventsFuture;
@@ -58,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onCityChanged(String city) {
     setState(() {
       _selectedCity = city;
-      _futureEventsByCity = ApiService().fetchEvents(city: _selectedCity);
+      _futureEventsByCity = GraphQLApi.instance.fetchEvents(city: _selectedCity);
     });
   }
 

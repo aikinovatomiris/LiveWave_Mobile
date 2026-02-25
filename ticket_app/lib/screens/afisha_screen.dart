@@ -7,6 +7,7 @@ import '../widgets/event_card.dart';
 import '../widgets/city_selector.dart';
 import '../widgets/event_search_bar.dart';
 import 'package:intl/intl.dart';
+import '../services/graphql_api.dart';
 
 class AfishaScreen extends StatefulWidget {
   const AfishaScreen({Key? key}) : super(key: key);
@@ -28,13 +29,14 @@ class _AfishaScreenState extends State<AfishaScreen> {
   }
 
   void _loadEvents() async {
+    // ignore: unused_local_variable
     final api = ApiService();
 
     setState(() {
-      _futureEvents = api.fetchEvents(city: _selectedCity);
+      _futureEvents = GraphQLApi.instance.fetchEvents(city: _selectedCity);
     });
 
-    final all = await api.fetchEvents();
+    final all = await GraphQLApi.instance.fetchEvents();
     setState(() {
       _allEvents = all;
     });
@@ -43,7 +45,7 @@ class _AfishaScreenState extends State<AfishaScreen> {
   void _onCityChanged(String city) {
     setState(() {
       _selectedCity = city;
-      _futureEvents = ApiService().fetchEvents(city: _selectedCity);
+      _futureEvents = GraphQLApi.instance.fetchEvents(city: _selectedCity);
     });
   }
 

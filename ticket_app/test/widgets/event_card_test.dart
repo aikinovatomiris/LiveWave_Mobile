@@ -15,7 +15,6 @@ void main() {
         final input = '15.02.2026, 19:00';
         final result = formatShortDate(input);
 
-        // Should parse and reformat
         expect(result, isNotEmpty);
       });
 
@@ -58,7 +57,7 @@ void main() {
       });
 
       test('handles leap year dates', () {
-        final input = '2024-02-29T19:00:00'; // Leap year
+        final input = '2024-02-29T19:00:00'; 
         final result = formatShortDate(input);
 
         expect(result, '29.02');
@@ -73,7 +72,6 @@ void main() {
 
       test('handles whitespace in date strings', () {
         final input = '  2026-02-15T19:00:00  ';
-        // Note: This tests actual behavior - may need adjustment based on implementation
         final result = formatShortDate(input);
         expect(result, isNotEmpty);
       });
@@ -106,7 +104,6 @@ void main() {
     group('_tryParseIso helper function', () {
       test('successfully parses ISO datetime string', () {
         final input = '2026-02-15T19:00:00';
-        // Testing through formatShortDate which uses _tryParseIso
         final result = formatShortDate(input);
 
         expect(result, '15.02');
@@ -116,22 +113,18 @@ void main() {
         final input = 'not-iso-format';
         final result = formatShortDate(input);
 
-        // Should return original since it can't parse
         expect(result, 'not-iso-format');
       });
     });
 
     group('Date parsing fallback logic', () {
       test('tries multiple formats in order', () {
-        // All these should be parsed correctly by the fallback logic
         final isoDate = formatShortDate('2026-02-15T19:00:00');
 
         expect(isoDate, '15.02');
-        // Others depend on implementation
       });
 
       test('ISO format has priority', () {
-        // ISO format should be tried first
         final isoResult = formatShortDate('2026-02-15T19:00:00');
         expect(isoResult, '15.02');
       });
@@ -161,9 +154,7 @@ void main() {
       });
 
       test('handles dates with different time zones (as strings)', () {
-        // This tests if function handles various string formats
         final input = '2026-02-15T19:00:00.000Z';
-        // Depending on implementation, may or may not parse
         final result = formatShortDate(input);
         expect(result, isNotEmpty);
       });
@@ -180,8 +171,7 @@ void main() {
         final input = '2026-02-15T19:00:00';
         final result = formatShortDate(input);
 
-        // Result should be short date format
-        expect(result.length, 5); // 'dd.mm' format
+        expect(result.length, 5); 
       });
     });
   });

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/event.dart';
 import '../models/seat.dart';
-import '../services/api_service.dart';
 import '../widgets/app_button.dart';
 import 'package:ticket_app/services/websocket_service.dart';
+import '../services/graphql_api.dart';
 
 class SeatSelectionScreen extends StatefulWidget {
   final Event event;
@@ -23,7 +23,7 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
   void initState() {
     super.initState();
 
-    _futureSeats = ApiService().getSeatsByEvent(widget.event.id);
+    _futureSeats = GraphQLApi.instance.getSeatsByEvent(widget.event.id);
 
     WebsocketService.instance.connect();
 

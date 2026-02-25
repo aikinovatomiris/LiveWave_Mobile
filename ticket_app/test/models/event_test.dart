@@ -40,7 +40,6 @@ void main() {
 
       final event = Event.fromJson(json);
 
-      // Проверяем, что дата отформатирована
       expect(event.date, isNotEmpty);
       expect(event.date, contains('15'));
       expect(event.date, contains('02'));
@@ -131,7 +130,6 @@ void main() {
 
       final event = Event.fromJson(json);
 
-      // Должен возвращать оригинальное значение при ошибке парсинга
       expect(event.date, 'invalid-date');
     });
 

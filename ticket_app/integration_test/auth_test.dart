@@ -9,7 +9,6 @@ void main() {
 
   group('Authentication Flow Integration Tests', () {
     setUp(() async {
-      // Clear stored preferences before each test
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
     });
@@ -19,11 +18,9 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Verify login screen elements
       expect(find.byType(TextFormField), findsWidgets);
       expect(find.byType(TextField), findsWidgets);
       expect(find.byType(ElevatedButton), findsWidgets);
@@ -34,18 +31,15 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Look for toggle button or text
       final textButtons = find.byType(TextButton);
       if (textButtons.evaluate().isNotEmpty) {
         await tester.tap(textButtons.first);
         await tester.pumpAndSettle();
       }
 
-      // Screen should update
       expect(find.byType(Scaffold), findsWidgets);
     });
 
@@ -53,27 +47,22 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Find email field
       final emailFields = find.byType(TextField);
       expect(emailFields, findsWidgets);
 
-      // Enter invalid email
       await tester.tap(emailFields.first);
       await tester.enterText(emailFields.first, 'invalidemail');
       await tester.pumpAndSettle();
 
-      // Try to submit
       final buttons = find.byType(ElevatedButton);
       if (buttons.evaluate().isNotEmpty) {
         await tester.tap(buttons.last);
         await tester.pumpAndSettle();
       }
 
-      // Form should still be visible (validation error)
       expect(find.byType(Scaffold), findsWidgets);
     });
 
@@ -82,11 +71,9 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Look for IconButtons (visibility toggle)
       await tester.pumpAndSettle();
       expect(find.byType(IconButton), findsWidgets);
     });
@@ -96,19 +83,15 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Find continue without login button (if present)
       final buttons = find.byType(TextButton);
       if (buttons.evaluate().isNotEmpty) {
-        // Try first text button
         await tester.tap(buttons.first);
         await tester.pumpAndSettle();
       }
 
-      // Should navigate to home
       await tester.pumpAndSettle(const Duration(seconds: 1));
       expect(find.byType(Scaffold), findsWidgets);
     });
@@ -117,23 +100,19 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Find and fill email field
       final emailFields = find.byType(TextField);
       if (emailFields.evaluate().isNotEmpty) {
         await tester.tap(emailFields.first);
         await tester.enterText(emailFields.first, 'test@example.com');
         await tester.pumpAndSettle();
 
-        // Clear the field
         await tester.tap(emailFields.first);
         await tester.enterText(emailFields.first, '');
         await tester.pumpAndSettle();
 
-        // Field should be empty
         expect(find.text('test@example.com'), findsNothing);
       }
     });
@@ -143,18 +122,15 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Try to submit empty form
       final submitButtons = find.byType(ElevatedButton);
       if (submitButtons.evaluate().isNotEmpty) {
         await tester.tap(submitButtons.last);
         await tester.pumpAndSettle();
       }
 
-      // Form should still be displayed
       expect(find.byType(TextField), findsWidgets);
     });
 
@@ -163,15 +139,12 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Find password fields
       final fields = find.byType(TextField);
       expect(fields, findsWidgets);
 
-      // Should have at least 2 fields (email + password)
       expect(fields.evaluate().length, greaterThanOrEqualTo(2));
     });
   });
@@ -182,14 +155,11 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Look for forgot password link/button
       final links = find.byType(GestureDetector);
       if (links.evaluate().isNotEmpty) {
-        // Try tapping different elements
         for (var i = 0; i < links.evaluate().length; i++) {
           await tester.pumpAndSettle();
         }
@@ -203,14 +173,11 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Try to find forgot password route
       await tester.pumpAndSettle();
 
-      // Verify form structure
       expect(find.byType(TextField), findsWidgets);
     });
   });
@@ -221,15 +188,12 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Navigate back if possible
       await tester.pageBack();
       await tester.pumpAndSettle();
 
-      // App should still function
       expect(find.byType(MaterialApp), findsOneWidget);
     });
 
@@ -238,36 +202,29 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Check if SharedPreferences works
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('test_key', 'test_value');
 
       final value = prefs.getString('test_key');
       expect(value, 'test_value');
 
-      // Clean up
       await prefs.remove('test_key');
     });
 
     testWidgets('User name is loaded from preferences',
         (WidgetTester tester) async {
-      // Set up preferences with user data
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('user_name', 'Test User');
 
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to home
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
       await tester.pumpAndSettle();
 
-      // User name should be available
-      // (exact verification depends on UI implementation)
       expect(find.byType(Scaffold), findsWidgets);
 
-      // Clean up
       await prefs.remove('user_name');
     });
   });
@@ -278,11 +235,9 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Find password field (usually second text field)
       final fields = find.byType(TextField);
       if (fields.evaluate().length >= 2) {
         final passwordField = fields.at(1);
@@ -290,7 +245,6 @@ void main() {
         await tester.enterText(passwordField, '123');
         await tester.pumpAndSettle();
 
-        // Try to submit
         final buttons = find.byType(ElevatedButton);
         if (buttons.evaluate().isNotEmpty) {
           await tester.tap(buttons.last);
@@ -306,25 +260,21 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Find and fill email with invalid format
       final fields = find.byType(TextField);
       if (fields.evaluate().isNotEmpty) {
         await tester.tap(fields.first);
         await tester.enterText(fields.first, 'not-an-email');
         await tester.pumpAndSettle();
 
-        // Try to submit
         final buttons = find.byType(ElevatedButton);
         if (buttons.evaluate().isNotEmpty) {
           await tester.tap(buttons.last);
           await tester.pumpAndSettle();
         }
 
-        // Should show error or remain on page
         expect(find.byType(Scaffold), findsWidgets);
       }
     });
@@ -334,24 +284,19 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Fill with valid data
       final fields = find.byType(TextField);
       if (fields.evaluate().length >= 2) {
-        // Email
         await tester.tap(fields.first);
         await tester.enterText(fields.first, 'test@example.com');
 
-        // Password
         await tester.tap(fields.at(1));
         await tester.enterText(fields.at(1), 'password123');
 
         await tester.pumpAndSettle();
 
-        // Try to submit
         final buttons = find.byType(ElevatedButton);
         if (buttons.evaluate().isNotEmpty) {
           await tester.tap(buttons.last);
@@ -359,7 +304,6 @@ void main() {
         }
       }
 
-      // App should respond to submission
       await tester.pumpAndSettle(const Duration(seconds: 2));
       expect(find.byType(MaterialApp), findsOneWidget);
     });
@@ -371,11 +315,9 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Verify buttons exist and are accessible
       expect(find.byType(ElevatedButton), findsWidgets);
     });
 
@@ -384,11 +326,9 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Fill form
       final fields = find.byType(TextField);
       if (fields.evaluate().length >= 2) {
         await tester.tap(fields.first);
@@ -396,14 +336,12 @@ void main() {
         await tester.tap(fields.at(1));
         await tester.enterText(fields.at(1), 'password123');
 
-        // Submit
         final buttons = find.byType(ElevatedButton);
         if (buttons.evaluate().isNotEmpty) {
           await tester.tap(buttons.last);
           await tester.pump();
 
-          // Check for loading indicator (CircularProgressIndicator)
-          // May or may not be visible depending on network speed
+        
           expect(find.byType(CircularProgressIndicator), findsAny);
         }
       }
@@ -414,11 +352,9 @@ void main() {
       await tester.pumpWidget(const TicketApp());
       await tester.pumpAndSettle();
 
-      // Navigate to login
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      // Submit with invalid data that will fail
       final fields = find.byType(TextField);
       if (fields.evaluate().length >= 2) {
         await tester.tap(fields.first);
@@ -432,7 +368,6 @@ void main() {
           await tester.pumpAndSettle(const Duration(seconds: 2));
         }
 
-        // Should show error message or SnackBar
         expect(find.byType(SnackBar), findsAny);
       }
     });
